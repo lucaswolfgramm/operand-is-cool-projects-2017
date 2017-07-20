@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Primeiro Teste Vue.js</title>
+</head>
+<body>
+    <style type="text/css">
+        .sucesso {
+            color: green;
+        }
+        .erro {
+            color: red;
+        }
+    </style>
+    <div id="app">
+        <span v-bind:title="mensagem" v-if="isVisible">
+        {{ mensagem }}
+        </span>
+        <span v-else>
+        Outra mensagem
+        </span>
+        <p>Exemplo com classes</p>
+        <span v-bind:title="contador" :class="{'sucesso': contador > 0, 'erro' : contador <= 0 }">
+        {{ contador }}
+        </span>
+        <p>Mensagem modificada: "{{ mensagemModificada }}"</p>
+        <p>Mensagem com filtro UPPER aplicado: "{{ mensagem | upper }}"</p>
+        <p>Mensagem com filtro UPPER e REVERSE aplicado: "{{ mensagem | upper | reverse }}"</p>
+        <p>Mensagem com filtro UPPER e CUT (com params 2,6) aplicado: "{{ mensagem | upper | cut(2,6) }}"</p>
+        <p>Mensagem com JS split, reverse e join aplicados: "{{ mensagem.split('').reverse().join('') }}"</p>
+        <!-- Javascript split('') vai criar um array com cada letra -->
+        <!-- Javascript reverse() vai inverter os itens do array -->
+        <!-- Javascript join('') vai juntar os itens do array e criar uma string -->
+    </div>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js" ></script>
+<script type="text/javascript">
+    // precisa ser colocado antes da instânciação do objeto Vue sendo assim global
+    //Vue.filter('upper', function (text) {
+    //    return text.toUpperCase();
+    //});
+    var app = new Vue({
+        el : '#app',
+        data : {
+            mensagem: 'Hello World',
+            isVisible: false,
+            contador: 0,
+        },
+        created: function() {
+            console.log('Instância Vue.js criada!');
+        },
+        computed: {
+            mensagemModificada: function () {
+                return this.mensagem.toUpperCase().substring(1, 3);
+            }
+        },
+        watch : {
+            mensagem: function () {
+                console.log('alterou o texto');
+            }
+        },
+        filters: {
+            upper: function(text) {
+                return text.toUpperCase();
+            },
+            reverse : function (text) {
+                return text.split('').reverse().join('');
+            },
+            cut : function (text, index1, index2) {
+                // primeiro parâmetro sempre será o input do filtro
+                return text.substring(index1, index2);
+            }
+        }
+    });
+</script>
+</html>
